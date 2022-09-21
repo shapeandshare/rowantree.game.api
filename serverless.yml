@@ -50,39 +50,14 @@ provider:
 
 functions:
   #  https://www.serverless.com/framework/docs/providers/aws/guide/functions
-
-  TokenLambdaFunction:
-    handler: src.handlers.token_handler.handler
-    name: ${self:service}-${self:custom.stage}-TokenLambdaFunction
+  UserActiveSetLambdaFunction:
+    handler: src.handlers.user_active_set.handler
+    name: ${self:service}-${self:custom.stage}-UserActiveSetLambdaFunction
     url:
       cors: true
     events:
       - http:
-# Deployment as a stand-alone endpoint, e.g. https://sandbox.rowantree.local/{/v1/auth/token}
-#          path: /v1/auth/token
-# Deployment within an environment level unified endpoint, e.g. https://sandbox.rowantree.local/auth/{v1/token}
-          path: /v1/token
-          method: post
-    vpc:
-      securityGroupIds:
-        - ${self:custom.securityGroupId}
-      subnetIds:
-        - ${self:custom.subnetIdOne}
-        - ${self:custom.subnetIdTwo}
-        - ${self:custom.subnetIdThree}
-        - ${self:custom.subnetIdFour}
-
-  RegisterLambdaFunction:
-    handler: src.handlers.register_handler.handler
-    name: ${self:service}-${self:custom.stage}-RegisterLambdaFunction
-    url:
-      cors: true
-    events:
-      - http:
-# Deployment as a stand-alone endpoint, e.g. https://sandbox.rowantree.local/{/v1/auth/register}
-#          path: /v1/auth/register
-# Deployment within an environment level unified endpoint, e.g. https://sandbox.rowantree.local/auth/{/v1/register}
-          path: /v1/register
+          path: /v1/user/{user_guid}/active
           method: post
     vpc:
       securityGroupIds:
