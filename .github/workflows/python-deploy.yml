@@ -1,0 +1,40 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy-sandbox:
+    runs-on: ubuntu-latest
+    container:
+      image: therowantree/aws.lambda.python.build.image:latest
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.SANDBOX_AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.SANDBOX_AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.SANDBOX_AWS_DEFAULT_REGION }}
+        # TODO: Review deployment stages.
+        STAGE: sandbox
+        ROWANTREE_TLD: ${{ secrets.SANDBOX_ROWANTREE_TLD }}
+        ACCESS_TOKEN_SECRET_KEY: ${{ secrets.SANDBOX_ACCESS_TOKEN_SECRET_KEY }}
+        ACCESS_TOKEN_ALGORITHM: ${{ secrets.SANDBOX_ACCESS_TOKEN_ALGORITHM }}
+        ACCESS_TOKEN_EXPIRATION_TIME: ${{ secrets.SANDBOX_ACCESS_TOKEN_EXPIRATION_TIME }}
+        DATABASE_SERVER: ${{ secrets.SANDBOX_DATABASE_SERVER }}
+        DATABASE_NAME: ${{ secrets.SANDBOX_ACCESS_DATABASE_NAME }}
+        DATABASE_USERNAME: ${{ secrets.SANDBOX_ACCESS_DATABASE_USERNAME }}
+        DATABASE_PASSWORD: ${{ secrets.SANDBOX_ACCESS_DATABASE_PASSWORD }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        python3.9 -m venv venv
+        source ./venv/bin/activate
+        pip install --upgrade pip
+        pip install sacr
+        . /root/.nvm/nvm.sh && npx npm ci
+        sacr run prebuild
+    - name: Deploy
+      run: |
+        python3.9 -m venv venv
+        . /root/.nvm/nvm.sh && npx serverless deploy

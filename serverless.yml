@@ -1,0 +1,97 @@
+service: rowantree-auth-api
+frameworkVersion: '3'
+
+custom:
+  region: ${env:AWS_DEFAULT_REGION}
+  stage: ${env:STAGE}
+
+  tld: ${env:ROWANTREE_TLD} # e.g. sandbox.rowantree.shapeandshare.net
+  accessTokenSecretKey: ${env:ACCESS_TOKEN_SECRET_KEY}
+  accessTokenAlgorithm: ${env:ACCESS_TOKEN_ALGORITHM}
+  accessTokenExpirationTime: ${env:ACCESS_TOKEN_EXPIRATION_TIME}
+  databaseServer: ${env:DATABASE_SERVER}
+  databaseUsername: ${env:DATABASE_USERNAME}
+  databasePassword: ${env:DATABASE_PASSWORD}
+  databaseName: ${env:DATABASE_NAME}
+  # This is for sandbox
+  # TODO: Move to cloudformation exports
+  securityGroupId: 'sg-0b808f5df0a126a8d'
+  subnetIdOne: 'subnet-046cd412566ccddf6'
+  subnetIdTwo: 'subnet-0c94756c92664d8f5'
+  subnetIdThree: 'subnet-00d10f987726a8a3e'
+  subnetIdFour: 'subnet-0799b88d1af596ab5'
+  prune: #serverless-prune-plugin configuration: 3 versions are kept
+    automatic: true
+    number: 3
+
+package:
+  individually: true
+  exclude:
+    - "**/*"
+  include:
+    - "src/**/*.*"
+
+plugins:
+  - serverless-python-requirements
+  - serverless-prune-plugin
+
+provider:
+  name: aws
+  stage: ${self:custom.stage}
+  region: ${self:custom.region}
+  runtime: python3.9
+  memorySize: 256
+  environment:
+    ROWANTREE_TLD: ${self:custom.tld}
+    ACCESS_TOKEN_SECRET_KEY: ${self:custom.accessTokenSecretKey}
+    ACCESS_TOKEN_ALGORITHM: ${self:custom.accessTokenAlgorithm}
+    ACCESS_TOKEN_EXPIRATION_TIME: ${self:custom.accessTokenExpirationTime}
+    DATABASE_SERVER: ${self:custom.databaseServer}
+    DATABASE_NAME: ${self:custom.databaseName}
+    DATABASE_USERNAME: ${self:custom.databaseUsername}
+    DATABASE_PASSWORD: ${self:custom.databasePassword}
+
+functions:
+  #  https://www.serverless.com/framework/docs/providers/aws/guide/functions
+
+  TokenLambdaFunction:
+    handler: src.handlers.token_handler.handler
+    name: ${self:service}-${self:custom.stage}-TokenLambdaFunction
+    url:
+      cors: true
+    events:
+      - http:
+# Deployment as a stand-alone endpoint, e.g. https://sandbox.rowantree.local/{/v1/auth/token}
+#          path: /v1/auth/token
+# Deployment within an environment level unified endpoint, e.g. https://sandbox.rowantree.local/auth/{v1/token}
+          path: /v1/token
+          method: post
+    vpc:
+      securityGroupIds:
+        - ${self:custom.securityGroupId}
+      subnetIds:
+        - ${self:custom.subnetIdOne}
+        - ${self:custom.subnetIdTwo}
+        - ${self:custom.subnetIdThree}
+        - ${self:custom.subnetIdFour}
+
+  RegisterLambdaFunction:
+    handler: src.handlers.register_handler.handler
+    name: ${self:service}-${self:custom.stage}-RegisterLambdaFunction
+    url:
+      cors: true
+    events:
+      - http:
+# Deployment as a stand-alone endpoint, e.g. https://sandbox.rowantree.local/{/v1/auth/register}
+#          path: /v1/auth/register
+# Deployment within an environment level unified endpoint, e.g. https://sandbox.rowantree.local/auth/{/v1/register}
+          path: /v1/register
+          method: post
+    vpc:
+      securityGroupIds:
+        - ${self:custom.securityGroupId}
+      subnetIds:
+        - ${self:custom.subnetIdOne}
+        - ${self:custom.subnetIdTwo}
+        - ${self:custom.subnetIdThree}
+        - ${self:custom.subnetIdFour}
