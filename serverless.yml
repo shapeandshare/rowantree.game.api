@@ -1,19 +1,17 @@
-service: rowantree-auth-api
+service: rowantree-game-api
 frameworkVersion: '3'
 
 custom:
   region: ${env:AWS_DEFAULT_REGION}
+  # This is for sandbox
   stage: ${env:STAGE}
-
   tld: ${env:ROWANTREE_TLD} # e.g. sandbox.rowantree.shapeandshare.net
   accessTokenSecretKey: ${env:ACCESS_TOKEN_SECRET_KEY}
   accessTokenAlgorithm: ${env:ACCESS_TOKEN_ALGORITHM}
-  accessTokenExpirationTime: ${env:ACCESS_TOKEN_EXPIRATION_TIME}
   databaseServer: ${env:DATABASE_SERVER}
   databaseUsername: ${env:DATABASE_USERNAME}
   databasePassword: ${env:DATABASE_PASSWORD}
   databaseName: ${env:DATABASE_NAME}
-  # This is for sandbox
   # TODO: Move to cloudformation exports
   securityGroupId: 'sg-0b808f5df0a126a8d'
   subnetIdOne: 'subnet-046cd412566ccddf6'
@@ -45,7 +43,6 @@ provider:
     ROWANTREE_TLD: ${self:custom.tld}
     ACCESS_TOKEN_SECRET_KEY: ${self:custom.accessTokenSecretKey}
     ACCESS_TOKEN_ALGORITHM: ${self:custom.accessTokenAlgorithm}
-    ACCESS_TOKEN_EXPIRATION_TIME: ${self:custom.accessTokenExpirationTime}
     DATABASE_SERVER: ${self:custom.databaseServer}
     DATABASE_NAME: ${self:custom.databaseName}
     DATABASE_USERNAME: ${self:custom.databaseUsername}
