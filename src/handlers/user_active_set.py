@@ -23,13 +23,14 @@ user_active_set_controller = UserActiveSetController(dao=dao)
 
 
 def handler(event, context):
-    logging.info(event)
-    logging.info(context)
+    logging.error(event)
+    logging.error(context)
 
     # TODO: Check auth...
     try:
         api_gw_event = ApiGatewayEvent.parse_obj(event)
         request: UserActiveGetStatus = UserActiveGetStatus.parse_raw(api_gw_event.body)
+        logging.error(request)
         # if user_guid != token_claims.sub and not token_claims.admin:
         #     raise HTTPException(
         #         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -38,7 +39,7 @@ def handler(event, context):
 
         # user_active_set_controller.execute(user_guid=user_guid, request=request)
 
-        return LambdaResponse(status_code=status.HTTP_200_OK).dict(by_alias=True)
+        return LambdaResponse(status_code=status.HTTP_200_OK, body='').dict(by_alias=True)
     except HTTPException as error:
         message_dict: dict[str, Union[dict, str]] = {
             "statusCode": error.status_code,
