@@ -1,0 +1,17 @@
+export AWS_ACCESS_KEY_ID=<<>>
+export AWS_SECRET_ACCESS_KEY=<<>>
+export AWS_DEFAULT_REGION=<<>>
+
+export STAGE=<<>>
+export ROWANTREE_TLD=<<>>
+
+export ACCESS_TOKEN_SECRET_KEY=<<>>
+export ACCESS_TOKEN_ALGORITHM=<<>>
+
+export DATABASE_SERVER=<<>>
+export DATABASE_NAME=<<>>
+export DATABASE_USERNAME=<<>>
+export DATABASE_PASSWORD=<<>>
+
+export DOCKER_PUBLISH_API_KEY=<<>>
+export DOCKER_PUBLISHER_USER=<<>>

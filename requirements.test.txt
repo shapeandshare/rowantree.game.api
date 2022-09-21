@@ -1,0 +1,10 @@
+black~=22.1
+black[jupyter]~=22.1
+jupyter==1.0.0
+
+pylint~=2.12
+isort~=5.10
+safety~=1.10
+
+coverage~=6.3
+python-dotenv~=0.21

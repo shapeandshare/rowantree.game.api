@@ -1,0 +1,27 @@
+{
+  "name": "rowantree.auth.api",
+  "version": "0.1.0",
+  "description": "The Rowan Tree Authentication and Authorization API",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shapeandshare/rowantree.auth.api.git"
+  },
+  "author": "Joshua C. Burt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shapeandshare/rowantree.auth.api/issues"
+  },
+  "homepage": "https://github.com/shapeandshare/rowantree.auth.api#readme",
+  "devDependencies": {
+    "serverless": "^3.22.0",
+    "serverless-prune-plugin": "^2.0.1",
+    "serverless-python-requirements": "^5.4.0"
+  },
+  "dependencies": {}
+}

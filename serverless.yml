@@ -1,0 +1,69 @@
+service: rowantree-game-api
+frameworkVersion: '3'
+
+custom:
+  region: ${env:AWS_DEFAULT_REGION}
+  # This is for sandbox
+  stage: ${env:STAGE}
+  tld: ${env:ROWANTREE_TLD} # e.g. sandbox.rowantree.shapeandshare.net
+  accessTokenSecretKey: ${env:ACCESS_TOKEN_SECRET_KEY}
+  accessTokenAlgorithm: ${env:ACCESS_TOKEN_ALGORITHM}
+  databaseServer: ${env:DATABASE_SERVER}
+  databaseUsername: ${env:DATABASE_USERNAME}
+  databasePassword: ${env:DATABASE_PASSWORD}
+  databaseName: ${env:DATABASE_NAME}
+  # TODO: Move to cloudformation exports
+  securityGroupId: 'sg-0b808f5df0a126a8d'
+  subnetIdOne: 'subnet-046cd412566ccddf6'
+  subnetIdTwo: 'subnet-0c94756c92664d8f5'
+  subnetIdThree: 'subnet-00d10f987726a8a3e'
+  subnetIdFour: 'subnet-0799b88d1af596ab5'
+  prune: #serverless-prune-plugin configuration: 3 versions are kept
+    automatic: true
+    number: 3
+
+package:
+  individually: true
+  exclude:
+    - "**/*"
+  include:
+    - "src/**/*.*"
+
+plugins:
+  - serverless-python-requirements
+  - serverless-prune-plugin
+
+provider:
+  name: aws
+  stage: ${self:custom.stage}
+  region: ${self:custom.region}
+  runtime: python3.9
+  memorySize: 256
+  environment:
+    ROWANTREE_TLD: ${self:custom.tld}
+    ACCESS_TOKEN_SECRET_KEY: ${self:custom.accessTokenSecretKey}
+    ACCESS_TOKEN_ALGORITHM: ${self:custom.accessTokenAlgorithm}
+    DATABASE_SERVER: ${self:custom.databaseServer}
+    DATABASE_NAME: ${self:custom.databaseName}
+    DATABASE_USERNAME: ${self:custom.databaseUsername}
+    DATABASE_PASSWORD: ${self:custom.databasePassword}
+
+functions:
+  #  https://www.serverless.com/framework/docs/providers/aws/guide/functions
+  UserActiveSetLambdaFunction:
+    handler: src.handlers.user_active_set.handler
+    name: ${self:service}-${self:custom.stage}-UserActiveSetLambdaFunction
+    url:
+      cors: true
+    events:
+      - http:
+          path: /v1/user/{user_guid}/active
+          method: post
+    vpc:
+      securityGroupIds:
+        - ${self:custom.securityGroupId}
+      subnetIds:
+        - ${self:custom.subnetIdOne}
+        - ${self:custom.subnetIdTwo}
+        - ${self:custom.subnetIdThree}
+        - ${self:custom.subnetIdFour}

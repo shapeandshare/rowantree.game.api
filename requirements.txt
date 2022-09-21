@@ -1,0 +1,4 @@
+fastapi~=0.85.0
+requests-toolbelt~=0.9
+starlette~=0.20
+rowantree.game.service~=0.23
