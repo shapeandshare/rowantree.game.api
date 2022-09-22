@@ -24,8 +24,8 @@ world_status_get_controller = WorldStatusGetController(dao=dao)
 
 
 def handler(event, context) -> dict:
-    logging.error(event)
-    logging.error(context)
+    logging.info(event)
+    logging.info(context)
 
     try:
         # Get AWS event and request claims
