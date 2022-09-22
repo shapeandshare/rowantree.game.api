@@ -7,3 +7,4 @@ from src.contracts.dtos.header_type import HeaderType
 class ApiGatewayEvent(BaseModel):
     body: str
     headers: dict[Union[HeaderType, str], str]
+    path_parameters: dict[str, str]
