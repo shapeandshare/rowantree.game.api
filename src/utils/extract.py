@@ -10,14 +10,14 @@ from starlette.exceptions import HTTPException
 
 from rowantree.auth.sdk import TokenClaims, get_claims
 from src.contracts.dtos.api_gateway_event import ApiGatewayEvent
-from src.contracts.dtos.header_type import HeaderType
 
 
 def extract_claims(headers: dict) -> TokenClaims:
-    if HeaderType.AUTHORIZATION in headers:
-        header_value: str = headers[HeaderType.AUTHORIZATION]
-        token_str = header_value.replace("Bearer ", "")
-        return get_claims(token=token_str)
+    for key in headers.keys():
+        if key.lower() == "authorization":
+            header_value: str = headers[key]
+            token_str = header_value.replace("Bearer ", "")
+            return get_claims(token=token_str)
     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing authorization header")
 
 
