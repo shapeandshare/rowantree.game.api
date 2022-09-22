@@ -30,16 +30,18 @@ def handler(event, context):
 
     try:
         api_gw_event: ApiGatewayEvent = ApiGatewayEvent.parse_obj(event)
+
+        # Extract the claims of the request (this fails nicely with 401 where expected)
+        token_claims: TokenClaims = extract_claims(api_gw_event.headers)
+
+        # Get the request from the body
         request: UserActiveGetStatus = UserActiveGetStatus.parse_raw(api_gw_event.body)
 
         # Extract the guid from the request url
         user_guid: str = demand_key(key="user_guid", parameters=api_gw_event.path_parameters)
 
-        # Extract the claims of the request (this fails nicely with 401 where expected)
-        token_claims: TokenClaims = extract_claims(api_gw_event.headers)
-
         # Authorize the request
-        if user_guid != token_claims.sub and not token_claims.admin:
+        if (user_guid != token_claims.sub) or (user_guid != token_claims.sub and not token_claims.admin):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Could not validate credentials",
