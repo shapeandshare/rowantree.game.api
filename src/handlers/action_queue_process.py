@@ -10,8 +10,8 @@ from rowantree.contracts import ActionQueue
 from rowantree.game.service.controllers.action_queue_process import ActionQueueProcessController
 from rowantree.game.service.services.db.dao import DBDAO
 from rowantree.game.service.services.db.utils import WrappedConnectionPool
-from src.contracts.dtos.api_gateway_event import ApiGatewayEvent
 from src.contracts.dtos.lambda_response import LambdaResponse
+from src.utils.extract import demand_is_admin, demand_is_enabled, marshall_body, preprocess
 
 logging.basicConfig(level=logging.INFO)
 
@@ -19,20 +19,29 @@ logging.basicConfig(level=logging.INFO)
 wrapped_cnxpool: WrappedConnectionPool = WrappedConnectionPool()
 dao: DBDAO = DBDAO(cnxpool=wrapped_cnxpool.cnxpool)
 
-action_queue_process_controller: ActionQueueProcessController = ActionQueueProcessController(dao=dao)
+action_queue_process_controller = ActionQueueProcessController(dao=dao)
 
 
-def handler(event, context):
-    logging.info(event)
-    logging.info(context)
+def handler(event, context) -> dict:
+    logging.error(event)
+    logging.error(context)
 
     try:
-        # TODO: Check auth...
+        # Get AWS event and request claims
+        api_gw_event, token_claims = preprocess(event=event)
 
-        api_gw_event = ApiGatewayEvent.parse_obj(event)
-        request: ActionQueue = ActionQueue.parse_raw(api_gw_event.body)
+        # Get the request from the body
+        request: ActionQueue = marshall_body(body=api_gw_event.body, return_type=ActionQueue)
+
+        # Authorize the request
+        demand_is_enabled(token_claims=token_claims)
+        demand_is_admin(token_claims=token_claims)
+
+        # Execute the request
         action_queue_process_controller.execute(request=request)
-        return LambdaResponse(status_code=status.HTTP_200_OK).dict(by_alias=True)
+
+        # Response
+        return LambdaResponse(status_code=status.HTTP_200_OK, body="").dict(by_alias=True)
     except HTTPException as error:
         message_dict: dict[str, Union[dict, str]] = {
             "statusCode": error.status_code,
