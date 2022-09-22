@@ -12,6 +12,7 @@ from rowantree.game.service.services.db.dao import DBDAO
 from rowantree.game.service.services.db.utils import WrappedConnectionPool
 from src.contracts.dtos.lambda_response import LambdaResponse
 from src.utils.extract import demand_is_admin, demand_is_enabled, preprocess
+from src.utils.headers import default_response_headers
 
 # https://docs.aws.amazon.com/lambda/latest/dg/python-logging.html
 logging.getLogger().setLevel(logging.INFO)
@@ -39,9 +40,9 @@ def handler(event, context) -> dict:
         response: WorldStatus = world_status_get_controller.execute()
 
         # Response
-        return LambdaResponse(status_code=status.HTTP_201_CREATED, body=response.json(by_alias=True)).dict(
-            by_alias=True
-        )
+        return LambdaResponse(
+            status_code=status.HTTP_201_CREATED, body=response.json(by_alias=True), headers=default_response_headers()
+        ).dict(by_alias=True)
     except HTTPException as error:
         message_dict: dict[str, Union[dict, str]] = {
             "statusCode": error.status_code,
@@ -51,9 +52,9 @@ def handler(event, context) -> dict:
         }
         message: str = json.dumps(message_dict)
         logging.error(message)
-        return LambdaResponse(status_code=error.status_code, body=json.dumps({"detail": error.detail})).dict(
-            by_alias=True
-        )
+        return LambdaResponse(
+            status_code=error.status_code, body=json.dumps({"detail": error.detail}), headers=default_response_headers()
+        ).dict(by_alias=True)
     except Exception as error:
         message_dict: dict[str, Union[dict, str]] = {
             "statusCode": status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -63,5 +64,7 @@ def handler(event, context) -> dict:
         message: str = json.dumps(message_dict)
         logging.error(message)
         return LambdaResponse(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, body=json.dumps({"detail": "Internal Server Error"})
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            body=json.dumps({"detail": "Internal Server Error"}),
+            headers=default_response_headers(),
         ).dict(by_alias=True)
