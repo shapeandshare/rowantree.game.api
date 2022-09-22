@@ -23,7 +23,7 @@ custom:
     number: 3
 
 package:
-  individually: true
+  individually: false
   exclude:
     - "**/*"
   include:

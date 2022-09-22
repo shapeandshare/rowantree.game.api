@@ -13,7 +13,8 @@ from rowantree.game.service.services.db.utils import WrappedConnectionPool
 from src.contracts.dtos.lambda_response import LambdaResponse
 from src.utils.extract import demand_is_enabled, demand_is_subject_or_admin, demand_key, preprocess
 
-logging.basicConfig(level=logging.INFO)
+# https://docs.aws.amazon.com/lambda/latest/dg/python-logging.html
+logging.getLogger().setLevel(logging.INFO)
 
 # Creating database connection pool, and DAO
 wrapped_cnxpool: WrappedConnectionPool = WrappedConnectionPool()
