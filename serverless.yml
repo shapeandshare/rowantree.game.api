@@ -49,6 +49,42 @@ provider:
     DATABASE_PASSWORD: ${self:custom.databasePassword}
 
 functions:
+  ActionQueueProcessLambdaFunction:
+    handler: src.handlers.action_queue_process.handler
+    name: ${self:service}-${self:custom.stage}-ActionQueueProcessLambdaFunction
+    url:
+      cors: true
+    events:
+      - http:
+          path: /v1/world/queue
+          method: post
+    vpc:
+      securityGroupIds:
+        - ${self:custom.securityGroupId}
+      subnetIds:
+        - ${self:custom.subnetIdOne}
+        - ${self:custom.subnetIdTwo}
+        - ${self:custom.subnetIdThree}
+        - ${self:custom.subnetIdFour}
+
+  MerchantTransformLambdaFunction:
+    handler: src.handlers.merchant_transform.handler
+    name: ${self:service}-${self:custom.stage}-MerchantTransformLambdaFunction
+    url:
+      cors: true
+    events:
+      - http:
+          path: /v1/user/{user_guid}/merchant
+          method: post
+    vpc:
+      securityGroupIds:
+        - ${self:custom.securityGroupId}
+      subnetIds:
+        - ${self:custom.subnetIdOne}
+        - ${self:custom.subnetIdTwo}
+        - ${self:custom.subnetIdThree}
+        - ${self:custom.subnetIdFour}
+
   #  https://www.serverless.com/framework/docs/providers/aws/guide/functions
   UserActiveSetLambdaFunction:
     handler: src.handlers.user_active_set.handler
@@ -59,6 +95,150 @@ functions:
       - http:
           path: /v1/user/{user_guid}/active
           method: post
+    vpc:
+      securityGroupIds:
+        - ${self:custom.securityGroupId}
+      subnetIds:
+        - ${self:custom.subnetIdOne}
+        - ${self:custom.subnetIdTwo}
+        - ${self:custom.subnetIdThree}
+        - ${self:custom.subnetIdFour}
+
+  UserCreateLambdaFunction:
+    handler: src.handlers.user_create.handler
+    name: ${self:service}-${self:custom.stage}-UserCreateLambdaFunction
+    url:
+      cors: true
+    events:
+      - http:
+          path: /v1/user/{user_guid}
+          method: post
+    vpc:
+      securityGroupIds:
+        - ${self:custom.securityGroupId}
+      subnetIds:
+        - ${self:custom.subnetIdOne}
+        - ${self:custom.subnetIdTwo}
+        - ${self:custom.subnetIdThree}
+        - ${self:custom.subnetIdFour}
+
+  UserDeleteLambdaFunction:
+    handler: src.handlers.user_delete.handler
+    name: ${self:service}-${self:custom.stage}-UserDeleteLambdaFunction
+    url:
+      cors: true
+    events:
+      - http:
+          path: /v1/user/{user_guid}
+          method: delete
+    vpc:
+      securityGroupIds:
+        - ${self:custom.securityGroupId}
+      subnetIds:
+        - ${self:custom.subnetIdOne}
+        - ${self:custom.subnetIdTwo}
+        - ${self:custom.subnetIdThree}
+        - ${self:custom.subnetIdFour}
+
+  UserIncomeSetLambdaFunction:
+    handler: src.handlers.user_income_set.handler
+    name: ${self:service}-${self:custom.stage}-UserIncomeSetLambdaFunction
+    url:
+      cors: true
+    events:
+      - http:
+          path: /v1/user/{user_guid}/income
+          method: post
+    vpc:
+      securityGroupIds:
+        - ${self:custom.securityGroupId}
+      subnetIds:
+        - ${self:custom.subnetIdOne}
+        - ${self:custom.subnetIdTwo}
+        - ${self:custom.subnetIdThree}
+        - ${self:custom.subnetIdFour}
+
+  UserPopulationGetLambdaFunction:
+    handler: src.handlers.user_population_get.handler
+    name: ${self:service}-${self:custom.stage}-UserPopulationGetLambdaFunction
+    url:
+      cors: true
+    events:
+      - http:
+          path: /v1/user/{user_guid}/population
+          method: get
+    vpc:
+      securityGroupIds:
+        - ${self:custom.securityGroupId}
+      subnetIds:
+        - ${self:custom.subnetIdOne}
+        - ${self:custom.subnetIdTwo}
+        - ${self:custom.subnetIdThree}
+        - ${self:custom.subnetIdFour}
+
+  UserStateGetLambdaFunction:
+    handler: src.handlers.user_state_get.handler
+    name: ${self:service}-${self:custom.stage}-UserStateGetLambdaFunction
+    url:
+      cors: true
+    events:
+      - http:
+          path: /v1/user/{user_guid}/state
+          method: get
+    vpc:
+      securityGroupIds:
+        - ${self:custom.securityGroupId}
+      subnetIds:
+        - ${self:custom.subnetIdOne}
+        - ${self:custom.subnetIdTwo}
+        - ${self:custom.subnetIdThree}
+        - ${self:custom.subnetIdFour}
+
+  UserStoresGetLambdaFunction:
+    handler: src.handlers.user_stores_get.handler
+    name: ${self:service}-${self:custom.stage}-UserStoresGetLambdaFunction
+    url:
+      cors: true
+    events:
+      - http:
+          path: /v1/user/{user_guid}/stores
+          method: get
+    vpc:
+      securityGroupIds:
+        - ${self:custom.securityGroupId}
+      subnetIds:
+        - ${self:custom.subnetIdOne}
+        - ${self:custom.subnetIdTwo}
+        - ${self:custom.subnetIdThree}
+        - ${self:custom.subnetIdFour}
+
+  UserTransportLambdaFunction:
+    handler: src.handlers.user_transport.handler
+    name: ${self:service}-${self:custom.stage}-UserTransportLambdaFunction
+    url:
+      cors: true
+    events:
+      - http:
+          path: /v1/user/{user_guid}/transport
+          method: post
+    vpc:
+      securityGroupIds:
+        - ${self:custom.securityGroupId}
+      subnetIds:
+        - ${self:custom.subnetIdOne}
+        - ${self:custom.subnetIdTwo}
+        - ${self:custom.subnetIdThree}
+        - ${self:custom.subnetIdFour}
+
+  WorldStatusGetLambdaFunction:
+    handler: src.handlers.world_status_get.handler
+    name: ${self:service}-${self:custom.stage}-WorldStatusGetLambdaFunction
+    url:
+      cors: true
+    events:
+      - http:
+          path: /v1/world
+          method: get
     vpc:
       securityGroupIds:
         - ${self:custom.securityGroupId}

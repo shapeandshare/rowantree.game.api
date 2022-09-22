@@ -66,14 +66,6 @@ def demand_is_admin(token_claims: TokenClaims) -> None:
         )
 
 
-def demand_is_subject(user_guid: str, token_claims: TokenClaims) -> None:
-    # Authorize the request
-    if user_guid != token_claims.sub:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Permission denied",
-        )
-
 
 def demand_is_subject_or_admin(user_guid: str, token_claims: TokenClaims) -> None:
     # Authorize the request
