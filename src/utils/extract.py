@@ -66,7 +66,6 @@ def demand_is_admin(token_claims: TokenClaims) -> None:
         )
 
 
-
 def demand_is_subject_or_admin(user_guid: str, token_claims: TokenClaims) -> None:
     # Authorize the request
     if (user_guid != token_claims.sub) or (user_guid != token_claims.sub and not token_claims.admin):
