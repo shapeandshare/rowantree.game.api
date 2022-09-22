@@ -2,7 +2,7 @@ import json
 import logging
 import traceback
 from json import JSONDecodeError
-from typing import Any, Union
+from typing import Any, Generic, Tuple, TypeVar, Union
 
 from pydantic import ValidationError
 from starlette import status
@@ -27,14 +27,14 @@ def demand_key(key: str, parameters: dict[str, str]) -> str:
     raise Exception("Missing Key")
 
 
-def preprocess(event: Any) -> dict[str, Union[ApiGatewayEvent, TokenClaims]]:
+def preprocess(event: Any) -> Tuple[ApiGatewayEvent, TokenClaims]:
     try:
         # Marshall the raw inbound event into a known structure
         api_gw_event: ApiGatewayEvent = ApiGatewayEvent.parse_obj(event)
 
         # Extract the claims of the request (this fails nicely with 401 where expected)
         token_claims: TokenClaims = extract_claims(api_gw_event.headers)
-        return {"event": api_gw_event, "claims": token_claims}
+        return api_gw_event, token_claims
     except HTTPException as error:
         raise error from error
     except (ValidationError, JSONDecodeError) as error:
@@ -55,3 +55,23 @@ def demand_is_subject_or_admin(user_guid: str, token_claims: TokenClaims):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
         )
+
+
+TBodyType = TypeVar("TBodyType")
+
+
+class BodyBuilder(Generic[TBodyType]):
+    @staticmethod
+    def marshall_body(body: str) -> TBodyType:
+        try:
+            # Get the request from the body
+            return TBodyType.parse_raw(body)
+        except (ValidationError, JSONDecodeError) as error:
+            message_dict: dict[str, Union[dict, str]] = {
+                "statusCode": status.HTTP_400_BAD_REQUEST,
+                "traceback": traceback.format_exc(),
+                "error": str(error),
+            }
+            message: str = json.dumps(message_dict)
+            logging.error(message)
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Malformed request")
