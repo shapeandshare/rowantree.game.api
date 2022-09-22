@@ -1,8 +1,10 @@
 import json
 import logging
 import traceback
+from json import JSONDecodeError
 from typing import Union
 
+from pydantic import ValidationError
 from starlette import status
 from starlette.exceptions import HTTPException
 
@@ -22,6 +24,21 @@ dao: DBDAO = DBDAO(cnxpool=wrapped_cnxpool.cnxpool)
 user_active_set_controller = UserActiveSetController(dao=dao)
 
 
+def marshall_body(body: str) -> UserActiveGetStatus:
+    try:
+        # Get the request from the body
+        return UserActiveGetStatus.parse_raw(body)
+    except (ValidationError, JSONDecodeError) as error:
+        message_dict: dict[str, Union[dict, str]] = {
+            "statusCode": status.HTTP_400_BAD_REQUEST,
+            "traceback": traceback.format_exc(),
+            "error": str(error),
+        }
+        message: str = json.dumps(message_dict)
+        logging.error(message)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Malformed request")
+
+
 def handler(event, context):
     logging.error(event)
     logging.error(context)
@@ -31,7 +48,7 @@ def handler(event, context):
         api_gw_event, token_claims = preprocess(event=event)
 
         # Get the request from the body
-        request: UserActiveGetStatus = BodyBuilder[UserActiveGetStatus].marshall_body(api_gw_event.body)
+        request: UserActiveGetStatus = marshall_body(api_gw_event.body)
 
         # Extract the guid from the request url
         user_guid: str = demand_key(key="user_guid", parameters=api_gw_event.path_parameters)
