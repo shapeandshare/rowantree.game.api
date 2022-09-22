@@ -24,8 +24,8 @@ user_state_get_controller = UserStateGetController(dao=dao)
 
 
 def handler(event, context) -> dict:
-    logging.error(event)
-    logging.error(context)
+    logging.info(event)
+    logging.info(context)
 
     try:
         # Get AWS event and request claims
@@ -42,7 +42,7 @@ def handler(event, context) -> dict:
         response: UserState = user_state_get_controller.execute(user_guid=user_guid)
 
         # Response
-        return LambdaResponse(status_code=status.HTTP_201_CREATED, body=response.json(by_alias=True)).dict(
+        return LambdaResponse(status_code=status.HTTP_200_OK, body=response.json(by_alias=True)).dict(
             by_alias=True
         )
     except HTTPException as error:

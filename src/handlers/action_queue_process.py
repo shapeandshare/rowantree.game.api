@@ -24,8 +24,8 @@ action_queue_process_controller = ActionQueueProcessController(dao=dao)
 
 
 def handler(event, context) -> dict:
-    logging.error(event)
-    logging.error(context)
+    logging.info(event)
+    logging.info(context)
 
     try:
         # Get AWS event and request claims
