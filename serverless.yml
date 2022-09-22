@@ -52,11 +52,8 @@ functions:
   ActionQueueProcessLambdaFunction:
     handler: src.handlers.action_queue_process.handler
     name: ${self:service}-${self:custom.stage}-ActionQueueProcessLambdaFunction
-    url:
-      cors:
-        origin: '*'
     events:
-      - http:
+      - httpApi:
           path: /v1/world/queue
           method: post
     vpc:
@@ -71,11 +68,8 @@ functions:
   MerchantTransformLambdaFunction:
     handler: src.handlers.merchant_transform.handler
     name: ${self:service}-${self:custom.stage}-MerchantTransformLambdaFunction
-    url:
-      cors:
-        origin: '*'
     events:
-      - http:
+      - httpApi:
           path: /v1/user/{user_guid}/merchant
           method: post
     vpc:
@@ -91,11 +85,8 @@ functions:
   UserActiveSetLambdaFunction:
     handler: src.handlers.user_active_set.handler
     name: ${self:service}-${self:custom.stage}-UserActiveSetLambdaFunction
-    url:
-      cors:
-        origin: '*'
     events:
-      - http:
+      - httpApi:
           path: /v1/user/{user_guid}/active
           method: post
     vpc:
@@ -110,11 +101,8 @@ functions:
   UserCreateLambdaFunction:
     handler: src.handlers.user_create.handler
     name: ${self:service}-${self:custom.stage}-UserCreateLambdaFunction
-    url:
-      cors:
-        origin: '*'
     events:
-      - http:
+      - httpApi:
           path: /v1/user/{user_guid}
           method: post
     vpc:
@@ -129,11 +117,8 @@ functions:
   UserDeleteLambdaFunction:
     handler: src.handlers.user_delete.handler
     name: ${self:service}-${self:custom.stage}-UserDeleteLambdaFunction
-    url:
-      cors:
-        origin: '*'
     events:
-      - http:
+      - httpApi:
           path: /v1/user/{user_guid}
           method: delete
     vpc:
@@ -148,11 +133,8 @@ functions:
   UserIncomeSetLambdaFunction:
     handler: src.handlers.user_income_set.handler
     name: ${self:service}-${self:custom.stage}-UserIncomeSetLambdaFunction
-    url:
-      cors:
-        origin: '*'
     events:
-      - http:
+      - httpApi:
           path: /v1/user/{user_guid}/income
           method: post
     vpc:
@@ -167,11 +149,8 @@ functions:
   UserPopulationGetLambdaFunction:
     handler: src.handlers.user_population_get.handler
     name: ${self:service}-${self:custom.stage}-UserPopulationGetLambdaFunction
-    url:
-      cors:
-        origin: '*'
     events:
-      - http:
+      - httpApi:
           path: /v1/user/{user_guid}/population
           method: get
     vpc:
@@ -186,11 +165,8 @@ functions:
   UserStateGetLambdaFunction:
     handler: src.handlers.user_state_get.handler
     name: ${self:service}-${self:custom.stage}-UserStateGetLambdaFunction
-    url:
-      cors:
-        origin: '*'
     events:
-      - http:
+      - httpApi:
           path: /v1/user/{user_guid}/state
           method: get
     vpc:
@@ -205,11 +181,8 @@ functions:
   UserStoresGetLambdaFunction:
     handler: src.handlers.user_stores_get.handler
     name: ${self:service}-${self:custom.stage}-UserStoresGetLambdaFunction
-    url:
-      cors:
-        origin: '*'
     events:
-      - http:
+      - httpApi:
           path: /v1/user/{user_guid}/stores
           method: get
     vpc:
@@ -224,11 +197,8 @@ functions:
   UserTransportLambdaFunction:
     handler: src.handlers.user_transport.handler
     name: ${self:service}-${self:custom.stage}-UserTransportLambdaFunction
-    url:
-      cors:
-        origin: '*'
     events:
-      - http:
+      - httpApi:
           path: /v1/user/{user_guid}/transport
           method: post
     vpc:
@@ -243,11 +213,8 @@ functions:
   WorldStatusGetLambdaFunction:
     handler: src.handlers.world_status_get.handler
     name: ${self:service}-${self:custom.stage}-WorldStatusGetLambdaFunction
-    url:
-      cors:
-        origin: '*'
     events:
-      - http:
+      - httpApi:
           path: /v1/world
           method: get
     vpc:
