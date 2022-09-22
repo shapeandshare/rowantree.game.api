@@ -1,10 +1,8 @@
 import json
 import logging
 import traceback
-from json import JSONDecodeError
 from typing import Union
 
-from pydantic import ValidationError
 from starlette import status
 from starlette.exceptions import HTTPException
 
@@ -13,7 +11,7 @@ from rowantree.game.service.sdk import UserActiveGetStatus
 from rowantree.game.service.services.db.dao import DBDAO
 from rowantree.game.service.services.db.utils import WrappedConnectionPool
 from src.contracts.dtos.lambda_response import LambdaResponse
-from src.utils.extract import BodyBuilder, demand_is_subject_or_admin, demand_key, marshall_body, preprocess
+from src.utils.extract import demand_is_subject_or_admin, demand_key, marshall_body, preprocess
 
 logging.basicConfig(level=logging.INFO)
 
