@@ -21,7 +21,7 @@ dao: DBDAO = DBDAO(cnxpool=wrapped_cnxpool.cnxpool)
 
 merchant_transforms_perform_controller = MerchantTransformPerformController(dao=dao)
 
-# /v1/user/{user_guid}/merchant
+
 def handler(event, context) -> dict:
     logging.error(event)
     logging.error(context)

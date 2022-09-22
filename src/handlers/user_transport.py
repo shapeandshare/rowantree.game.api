@@ -22,7 +22,7 @@ dao: DBDAO = DBDAO(cnxpool=wrapped_cnxpool.cnxpool)
 
 user_transport_controller = UserTransportController(dao=dao)
 
-# /v1/user/{user_guid}/transport
+
 def handler(event, context) -> dict:
     logging.error(event)
     logging.error(context)

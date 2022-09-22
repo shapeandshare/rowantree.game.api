@@ -21,7 +21,7 @@ dao: DBDAO = DBDAO(cnxpool=wrapped_cnxpool.cnxpool)
 
 action_queue_process_controller = ActionQueueProcessController(dao=dao)
 
-# /v1/world/queue
+
 def handler(event, context) -> dict:
     logging.error(event)
     logging.error(context)

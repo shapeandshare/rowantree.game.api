@@ -21,7 +21,7 @@ dao: DBDAO = DBDAO(cnxpool=wrapped_cnxpool.cnxpool)
 
 user_state_get_controller = UserStateGetController(dao=dao)
 
-# /v1/user/{user_guid}/state
+
 def handler(event, context) -> dict:
     logging.error(event)
     logging.error(context)

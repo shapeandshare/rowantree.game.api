@@ -21,7 +21,7 @@ dao: DBDAO = DBDAO(cnxpool=wrapped_cnxpool.cnxpool)
 
 user_create_controller = UserCreateController(dao=dao)
 
-# /v1/user/{user_guid}
+
 def handler(event, context) -> dict:
     logging.error(event)
     logging.error(context)
