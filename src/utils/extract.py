@@ -48,12 +48,39 @@ def preprocess(event: Any) -> Tuple[ApiGatewayEvent, TokenClaims]:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Malformed request")
 
 
-def demand_is_subject_or_admin(user_guid: str, token_claims: TokenClaims):
+def demand_is_enabled(token_claims: TokenClaims) -> None:
+    if token_claims.disabled:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Account not enabled",
+        )
+
+
+def demand_is_admin(token_claims: TokenClaims) -> None:
+    # Authorize the request
+    demand_is_enabled(token_claims=token_claims)
+    if not token_claims.admin:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Permission denied",
+        )
+
+
+def demand_is_subject(user_guid: str, token_claims: TokenClaims) -> None:
+    # Authorize the request
+    if user_guid != token_claims.sub:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Permission denied",
+        )
+
+
+def demand_is_subject_or_admin(user_guid: str, token_claims: TokenClaims) -> None:
     # Authorize the request
     if (user_guid != token_claims.sub) or (user_guid != token_claims.sub and not token_claims.admin):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
+            detail="Permission denied",
         )
 
 
