@@ -2,7 +2,7 @@ import json
 import logging
 import traceback
 from json import JSONDecodeError
-from typing import Any, Generic, Tuple, TypeVar, Union
+from typing import Any, Tuple, Type, TypeVar, Union
 
 from pydantic import ValidationError
 from starlette import status
@@ -55,3 +55,21 @@ def demand_is_subject_or_admin(user_guid: str, token_claims: TokenClaims):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
         )
+
+
+TBodyType = TypeVar("TBodyType")
+
+
+def marshall_body(body: str, return_type: Type[TBodyType]) -> TBodyType:
+    try:
+        # Get the request from the body
+        return return_type.parse_raw(body)
+    except (ValidationError, JSONDecodeError) as error:
+        message_dict: dict[str, Union[dict, str]] = {
+            "statusCode": status.HTTP_400_BAD_REQUEST,
+            "traceback": traceback.format_exc(),
+            "error": str(error),
+        }
+        message: str = json.dumps(message_dict)
+        logging.error(message)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Malformed request")
