@@ -39,7 +39,7 @@ def handler(event, context) -> dict:
         response: WorldStatus = world_status_get_controller.execute()
 
         # Response
-        return LambdaResponse(status_code=status.HTTP_201_CREATED, body=response.json(by_alias=True)).dict(
+        return LambdaResponse(status_code=status.HTTP_200_OK, body=response.json(by_alias=True)).dict(
             by_alias=True
         )
     except HTTPException as error:
@@ -65,5 +65,4 @@ def handler(event, context) -> dict:
         return LambdaResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             body=json.dumps({"detail": "Internal Server Error"}),
-            headers=default_response_headers(),
         ).dict(by_alias=True)
