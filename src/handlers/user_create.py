@@ -68,5 +68,4 @@ def handler(event, context) -> dict:
         return LambdaResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             body=json.dumps({"detail": "Internal Server Error"}),
-            headers=default_response_headers(),
         ).dict(by_alias=True)
