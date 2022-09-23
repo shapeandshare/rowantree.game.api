@@ -39,9 +39,7 @@ def handler(event, context) -> dict:
         response: WorldStatus = world_status_get_controller.execute()
 
         # Response
-        return LambdaResponse(status_code=status.HTTP_200_OK, body=response.json(by_alias=True)).dict(
-            by_alias=True
-        )
+        return LambdaResponse(status_code=status.HTTP_200_OK, body=response.json(by_alias=True)).dict(by_alias=True)
     except HTTPException as error:
         message_dict: dict[str, Union[dict, str]] = {
             "statusCode": error.status_code,
