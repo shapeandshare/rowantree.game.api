@@ -22,7 +22,7 @@ def extract_claims(headers: dict) -> TokenClaims:
 
 
 def demand_key(key: str, parameters: dict[str, str]) -> str:
-    if key in parameters:
+    if parameters and key in parameters:
         return parameters[key]
     raise Exception("Missing Key")
 
