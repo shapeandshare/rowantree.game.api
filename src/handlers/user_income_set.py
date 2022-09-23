@@ -45,7 +45,7 @@ def handler(event, context) -> dict:
         user_income_set_controller.execute(user_guid=user_guid, request=request)
 
         # Response
-        return LambdaResponse(status_code=status.HTTP_201_CREATED).dict(by_alias=True)
+        return LambdaResponse(status_code=status.HTTP_200_OK).dict(by_alias=True)
     except HTTPException as error:
         message_dict: dict[str, Union[dict, str]] = {
             "statusCode": error.status_code,
