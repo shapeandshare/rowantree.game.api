@@ -52,6 +52,7 @@ functions:
   ActionQueueProcessLambdaFunction:
     handler: src.handlers.action_queue_process.handler
     name: ${self:service}-${self:custom.stage}-ActionQueueProcessLambdaFunction
+    reservedConcurrency: 1
     events:
       - httpApi:
           path: /v1/world/queue
@@ -68,6 +69,7 @@ functions:
   MerchantTransformLambdaFunction:
     handler: src.handlers.merchant_transform.handler
     name: ${self:service}-${self:custom.stage}-MerchantTransformLambdaFunction
+    reservedConcurrency: 1
     events:
       - httpApi:
           path: /v1/user/{user_guid}/merchant
@@ -85,6 +87,7 @@ functions:
   UserActiveSetLambdaFunction:
     handler: src.handlers.user_active_set.handler
     name: ${self:service}-${self:custom.stage}-UserActiveSetLambdaFunction
+    reservedConcurrency: 1
     events:
       - httpApi:
           path: /v1/user/{user_guid}/active
@@ -101,6 +104,7 @@ functions:
   UserCreateLambdaFunction:
     handler: src.handlers.user_create.handler
     name: ${self:service}-${self:custom.stage}-UserCreateLambdaFunction
+    reservedConcurrency: 1
     events:
       - httpApi:
           path: /v1/user/{user_guid}
@@ -117,6 +121,7 @@ functions:
   UserDeleteLambdaFunction:
     handler: src.handlers.user_delete.handler
     name: ${self:service}-${self:custom.stage}-UserDeleteLambdaFunction
+    reservedConcurrency: 1
     events:
       - httpApi:
           path: /v1/user/{user_guid}
@@ -133,6 +138,7 @@ functions:
   UserIncomeSetLambdaFunction:
     handler: src.handlers.user_income_set.handler
     name: ${self:service}-${self:custom.stage}-UserIncomeSetLambdaFunction
+    reservedConcurrency: 1
     events:
       - httpApi:
           path: /v1/user/{user_guid}/income
@@ -149,6 +155,7 @@ functions:
   UserPopulationGetLambdaFunction:
     handler: src.handlers.user_population_get.handler
     name: ${self:service}-${self:custom.stage}-UserPopulationGetLambdaFunction
+    reservedConcurrency: 1
     events:
       - httpApi:
           path: /v1/user/{user_guid}/population
@@ -165,6 +172,7 @@ functions:
   UserStateGetLambdaFunction:
     handler: src.handlers.user_state_get.handler
     name: ${self:service}-${self:custom.stage}-UserStateGetLambdaFunction
+    reservedConcurrency: 1
     events:
       - httpApi:
           path: /v1/user/{user_guid}/state
@@ -181,6 +189,7 @@ functions:
   UserStoresGetLambdaFunction:
     handler: src.handlers.user_stores_get.handler
     name: ${self:service}-${self:custom.stage}-UserStoresGetLambdaFunction
+    reservedConcurrency: 1
     events:
       - httpApi:
           path: /v1/user/{user_guid}/stores
@@ -197,6 +206,7 @@ functions:
   UserTransportLambdaFunction:
     handler: src.handlers.user_transport.handler
     name: ${self:service}-${self:custom.stage}-UserTransportLambdaFunction
+    reservedConcurrency: 1
     events:
       - httpApi:
           path: /v1/user/{user_guid}/transport
@@ -213,6 +223,7 @@ functions:
   WorldStatusGetLambdaFunction:
     handler: src.handlers.world_status_get.handler
     name: ${self:service}-${self:custom.stage}-WorldStatusGetLambdaFunction
+    reservedConcurrency: 1
     events:
       - httpApi:
           path: /v1/world
