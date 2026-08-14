@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy-sandbox:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     container:
       image: therowantree/aws.lambda.python.build.image:latest
       env:
